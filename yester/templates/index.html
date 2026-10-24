@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yester — Time Machine</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span class="logo">&#8383;</span>
+    <div>
+      <h1>{{ vault_name }}</h1>
+      <span class="sub">Time Machine &middot; {{ device }} &middot; v{{ version }}</span>
+    </div>
+  </div>
+  <div class="actions">
+    <input id="search" type="search" placeholder="Search every version…  (try: recipe)">
+    <button id="sync" class="btn">Sync now</button>
+  </div>
+</header>
+
+<div id="chips" class="chips"></div>
+
+<main>
+  <aside id="timeline">
+    <div class="aside-title">Timeline</div>
+    <div id="revs" class="revs"></div>
+  </aside>
+
+  <section id="panel">
+    <div id="panel-head" class="panel-head"></div>
+    <div id="panel-body" class="panel-body"></div>
+  </section>
+</main>
+
+<div id="toast" class="toast"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

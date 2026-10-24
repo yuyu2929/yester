@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="-apple-system, 'Segoe UI', Roboto, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6cb6ff"/>
+    </marker>
+    <marker id="arrow-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8a94ab"/>
+    </marker>
+  </defs>
+  <rect width="960" height="540" fill="#0d1017"/>
+
+  <!-- your machine -->
+  <rect x="30" y="60" width="400" height="420" rx="14" fill="#131824" stroke="#232c40"/>
+  <text x="50" y="90" fill="#e8ecf4" font-size="15" font-weight="700">Your machine — plaintext never leaves</text>
+
+  <rect x="55" y="105" width="170" height="52" rx="8" fill="#171e2e" stroke="#232c40"/>
+  <text x="70" y="127" fill="#e8ecf4" font-size="13" font-weight="600">Watched folder</text>
+  <text x="70" y="146" fill="#8a94ab" font-size="11">notes/ public/ projects/ …</text>
+
+  <rect x="240" y="105" width="165" height="52" rx="8" fill="#171e2e" stroke="#232c40"/>
+  <text x="255" y="127" fill="#e8ecf4" font-size="13" font-weight="600">yester watch</text>
+  <text x="255" y="146" fill="#8a94ab" font-size="11">debounced auto-commit</text>
+
+  <rect x="55" y="175" width="350" height="52" rx="8" fill="#171e2e" stroke="#232c40"/>
+  <text x="70" y="197" fill="#e8ecf4" font-size="13" font-weight="600">Git repository (local, single source of truth)</text>
+  <text x="70" y="216" fill="#8a94ab" font-size="11">main + devices/&lt;device&gt; branches · snapshots as tags</text>
+
+  <rect x="55" y="245" width="165" height="52" rx="8" fill="#171e2e" stroke="#232c40"/>
+  <text x="70" y="267" fill="#e8ecf4" font-size="13" font-weight="600">Blob store</text>
+  <text x="70" y="286" fill="#8a94ab" font-size="11">large files, content-addressed</text>
+
+  <rect x="240" y="245" width="165" height="52" rx="8" fill="#171e2e" stroke="#232c40"/>
+  <text x="255" y="267" fill="#e8ecf4" font-size="13" font-weight="600">Time Machine UI</text>
+  <text x="255" y="286" fill="#8a94ab" font-size="11">127.0.0.1 · browse · diff · restore</text>
+
+  <rect x="55" y="315" width="350" height="140" rx="8" fill="#0f1420" stroke="#232c40"/>
+  <text x="70" y="337" fill="#6cb6ff" font-size="12" font-weight="700">PERSONAL — free forever</text>
+  <text x="70" y="360" fill="#e8ecf4" font-size="12">· time machine, snapshots, search</text>
+  <text x="70" y="380" fill="#e8ecf4" font-size="12">· encrypted mirror, publishing</text>
+  <text x="70" y="400" fill="#e8ecf4" font-size="12">· multi-remote archive, inheritance</text>
+  <text x="70" y="428" fill="#34d399" font-size="11">no account · no subscription · no telemetry</text>
+
+  <!-- cloud -->
+  <rect x="530" y="60" width="400" height="420" rx="14" fill="#131824" stroke="#232c40"/>
+  <text x="550" y="90" fill="#e8ecf4" font-size="15" font-weight="700">Remotes — encrypted, redundant, replaceable</text>
+
+  <rect x="555" y="105" width="350" height="64" rx="8" fill="#171e2e" stroke="#232c40"/>
+  <text x="570" y="127" fill="#fbbf24" font-size="13" font-weight="600">Encrypted mirror</text>
+  <text x="570" y="146" fill="#8a94ab" font-size="11">AES-256-GCM per file · key wrapped by</text>
+  <text x="570" y="162" fill="#8a94ab" font-size="11">passphrase + recovery code</text>
+
+  <rect x="555" y="187" width="165" height="52" rx="8" fill="#171e2e" stroke="#232c40"/>
+  <text x="570" y="209" fill="#e8ecf4" font-size="13" font-weight="600">Blob remote</text>
+  <text x="570" y="228" fill="#8a94ab" font-size="11">rsync target / NAS</text>
+
+  <rect x="740" y="187" width="165" height="52" rx="8" fill="#171e2e" stroke="#232c40"/>
+  <text x="755" y="209" fill="#e8ecf4" font-size="13" font-weight="600">Published site</text>
+  <text x="755" y="228" fill="#8a94ab" font-size="11">public/ → gh-pages</text>
+
+  <rect x="555" y="257" width="350" height="64" rx="8" fill="#171e2e" stroke="#232c40"/>
+  <text x="570" y="279" fill="#e8ecf4" font-size="13" font-weight="600">Archive remotes × N</text>
+  <text x="570" y="298" fill="#8a94ab" font-size="11">GitHub · GitLab · Gitea · self-hosted —</text>
+  <text x="570" y="314" fill="#8a94ab" font-size="11">“forever” is redundancy, not a promise</text>
+
+  <rect x="555" y="339" width="350" height="116" rx="8" fill="#0f1420" stroke="#232c40"/>
+  <text x="570" y="361" fill="#a855f7" font-size="12" font-weight="700">TEAM / ENTERPRISE — licensed</text>
+  <text x="570" y="384" fill="#e8ecf4" font-size="12">· audit export · retention mode</text>
+  <text x="570" y="404" fill="#e8ecf4" font-size="12">· secret scanning hooks · policies</text>
+  <text x="570" y="424" fill="#e8ecf4" font-size="12">· private deployment · SSO config</text>
+  <text x="570" y="446" fill="#8a94ab" font-size="11">offline licence check · no phone-home</text>
+
+  <!-- flows -->
+  <line x1="230" y1="131" x2="234" y2="131" stroke="#6cb6ff" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="140" y1="157" x2="140" y2="173" stroke="#6cb6ff" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="230" y1="201" x2="400" y2="201" stroke="#6cb6ff" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="410" y1="130" x2="548" y2="130" stroke="#6cb6ff" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="418" y="122" fill="#8a94ab" font-size="10">seal + push</text>
+  <line x1="410" y1="271" x2="548" y2="213" stroke="#8a94ab" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow-dim)"/>
+  <line x1="410" y1="271" x2="735" y2="213" stroke="#8a94ab" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow-dim)"/>
+  <line x1="410" y1="225" x2="548" y2="285" stroke="#8a94ab" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow-dim)"/>
+  <text x="418" y="278" fill="#8a94ab" font-size="10">archive × N</text>
+
+  <text x="30" y="30" fill="#e8ecf4" font-size="20" font-weight="800">Yester — data flow</text>
+  <text x="30" y="510" fill="#8a94ab" font-size="11">One folder in. Versioned, encrypted, published, archived — and always yours.</text>
+</svg>

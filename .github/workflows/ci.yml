@@ -1,0 +1,139 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: tests (py ${{ matrix.python }} on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, python: '3.9' }
+          - { os: ubuntu-latest, python: '3.10' }
+          - { os: ubuntu-latest, python: '3.11' }
+          - { os: ubuntu-latest, python: '3.12' }
+          - { os: ubuntu-latest, python: '3.13' }
+          - { os: windows-latest, python: '3.12' }
+          - { os: macos-latest, python: '3.12' }
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: git identity (the vault commits, so git needs a name)
+        run: |
+          git config --global user.email "ci@example.com"
+          git config --global user.name "CI"
+
+      - run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
+
+      - name: tests
+        run: python -m pytest -q
+
+  cli:
+    name: cli walkthrough
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: git identity
+        run: |
+          git config --global user.email "ci@example.com"
+          git config --global user.name "CI"
+      - run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
+
+      - name: version the folder, inspect it, search it
+        run: |
+          set -eux
+          TMP=$(mktemp -d)
+          cd "$TMP"
+          yester --help > /dev/null
+          yester init vault --name "ci vault"
+          cd vault
+          printf 'first draft\n' > notes.md
+          yester snapshot "first"
+          printf 'second draft\n' > notes.md
+          yester snapshot "second"
+          yester log | head
+          yester status
+          yester search draft
+          yester scan
+          yester audit > /dev/null
+          test "$(ls .yester/index 2>/dev/null | wc -l)" -ge 0
+
+      - name: licence gate refuses the paid features without a key
+        run: |
+          set +e
+          TMP=$(mktemp -d); cd "$TMP"; yester init v > /dev/null; cd v
+          yester audit --output audit.json 2> err.txt
+          rc=$?
+          set -e
+          test "$rc" -ne 0
+          grep -qi "licence" err.txt
+          yester lock 2>/dev/null && { echo "lock should require a licence"; exit 1; } || true
+
+      - name: licence gate opens with a team key
+        run: |
+          set -eux
+          TMP=$(mktemp -d); cd "$TMP"; yester init v > /dev/null; cd v
+          KEY=$(python -c "from yester import license as l; print(l.issue_key('team'))")
+          yester activate "$KEY"
+          yester audit --output audit.json
+          test -s audit.json
+          yester lock
+          python -c "from yester.gitops import Vault; v=Vault('.'); assert v.config.data['retention'] is True"
+
+      - name: no passphrase and no tty fails fast instead of hanging
+        run: |
+          TMP=$(mktemp -d); cd "$TMP"; yester init v > /dev/null; cd v
+          set +e
+          timeout 20 yester mirror < /dev/null
+          rc=$?
+          set -e
+          test "$rc" -ne 124 || { echo "yester mirror hung waiting for input"; exit 1; }
+          test "$rc" -ne 0
+          timeout 20 yester mirror < /dev/null 2>&1 | grep -qi "passphrase"
+
+      - name: encrypted mirror hides names and round-trips
+        run: |
+          set -eux
+          TMP=$(mktemp -d); cd "$TMP"; yester init v > /dev/null; cd v
+          mkdir -p diary
+          printf 'meet at midnight\n' > diary/secret-plan.txt
+          export YESTER_PASSPHRASE="correct horse battery"
+          yester encrypt-init > /dev/null
+          yester mirror
+          if grep -r "secret" .yester/mirror --include='*' -l 2>/dev/null | grep -q .; then
+            echo "mirror leaked a file name"; ls -R .yester/mirror; exit 1
+          fi
+          test ! -f .yester/mirror/manifest.json
+          test -f .yester/mirror/manifest.enc
+          cd ..
+          yester --help > /dev/null
+          python - <<'PY'
+          from pathlib import Path
+          from yester import crypto
+          src = Path("v")
+          n = crypto.unlock_mirror(src / ".yester" / "mirror", Path("restored"),
+                                   passphrase="correct horse battery")
+          assert n >= 1, n
+          assert Path("restored/diary/secret-plan.txt").read_text() == "meet at midnight\n"
+          print("restored", n, "file(s)")
+          PY
