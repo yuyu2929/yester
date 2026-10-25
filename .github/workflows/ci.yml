@@ -75,7 +75,13 @@ jobs:
           yester status
           yester search draft
           yester scan
-          yester audit > /dev/null
+          # audit is a Team feature: without a licence it must be refused
+          set +e
+          yester audit > /dev/null 2> err.txt
+          rc=$?
+          set -e
+          test "$rc" -ne 0
+          grep -qi "licence" err.txt
           test "$(ls .yester/index 2>/dev/null | wc -l)" -ge 0
 
       - name: licence gate refuses the paid features without a key
